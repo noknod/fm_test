@@ -1,0 +1,19 @@
+﻿-- Role: fm
+-- pass: test
+-- DROP ROLE fm;
+
+CREATE ROLE fm LOGIN
+  ENCRYPTED PASSWORD 'md5858ec73a6efd8013eb7fee32d59a3ea3'
+  NOSUPERUSER NOINHERIT CREATEDB NOCREATEROLE NOREPLICATION;
+
+-- Database: fm
+
+-- DROP DATABASE fm;
+
+CREATE DATABASE fm
+  WITH OWNER = postgres
+       ENCODING = 'UTF8'
+       TABLESPACE = pg_default
+       LC_COLLATE = 'C.UTF-8'
+       LC_CTYPE = 'C.UTF-8'
+       CONNECTION LIMIT = -1;
