@@ -5,17 +5,74 @@
 {% block header %}Выбор ингредиентов для рецепта{% endblock %}
 
 {% block content %}
-        <form action="/registration/speciality/" method="POST">
+        <form action="/ings/search/" method="POST">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="OK">
+            <textarea  cols="100" rows="3" name="params" id="search_params"></textarea>
+            <div><input type="button" value="Найти" onclick="searchIngs()"></div>
         </form>
 
-        <form action="/clinic/registration/speciality/" method="POST">
-            {% csrf_token %}
-            <input type="text" name="_method" value="DELETE" hidden>
-            <input type="submit" value="Отмена">
-        </form>
+        <div>
+            Выбранные ингредиенты:
+            <ul id="ings_choosen">
+            
+            </ul>
+        </div>
+
+        <script type="text/javascript">
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            };
+
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            var ingredients = [];
+
+            function searchIngs() {
+                var params = $('#search_params').val();
+                var csrftoken = getCookie('csrftoken');
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+                $.post("/ings/search/", {
+                        'params': params
+                    },
+                    function(data) {
+                        if ('data' in data) {
+                            var ingredient_show_ul = $('#ings_choosen');
+                            for(var i = 0; i < data['data'].length; i++) {
+                                var item = data['data'][i];
+                                var id = item['id']
+                                var ingredient = item['ingredient']
+                                //alert(JSON.stringify(item));
+                                if ($.inArray(id, ingredients) == -1) {
+                                    ingredient_show_ul.append('<li><span class="undisplayed">' + id + '</span> <span>' + ingredient + '</span></li>');
+                                    ingredients.push(id);
+                                }
+                            }
+                        }
+                });
+            };
+        </script>
 {% endblock %}
 
 {% block footer %}Клюшкин Ю. А. 2015{% endblock %}

@@ -9,7 +9,7 @@ from django.conf import settings
 
 # Регулярное выражение для очистки строки от символов, отличающихся от 
 # русских букв и пробела
-RE_ONLY_ALPHA_AND_SPACE = re.compile(r'([^йцукенгшщзхъфывапролджэячсмитьбю ])')
+RE_ONLY_ALPHA_AND_SPACE = re.compile(r'([^йцукенгшщзхъфывапролджэячсмитьбюё ])')
 
 # Регулярное выражение для очистки строки от лишних пробелов
 RE_ONLY_ONE_SPACE = re.compile(r'(\s+)')

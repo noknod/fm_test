@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^$', views.index, name='fm-index'),
 
     url(r'^ings/$', views.ings_choose, name='fm-ings-choose'),
+
+    url(r'^ings/search/$', views.ings_search, name='fm-ings-search'),
 ]
